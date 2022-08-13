@@ -1,0 +1,89 @@
+import numpy as np
+import pandas as pd
+
+link="C:/Users/hasan/Desktop/diabetes.csv"
+df = pd.read_csv(link,header=0)
+
+df.head()
+df.info()
+df.isnull()
+df.isnull().sum()
+
+df.eq(0).sum()
+df.shape
+
+df[['Glucose','BloodPressure','SkinThickness','Insulin','BMI',
+    'DiabetesPedigreeFunction','Age'
+]]=df[['Glucose','BloodPressure','SkinThickness','Insulin','BMI',
+    'DiabetesPedigreeFunction','Age']].replace(0,np.NaN)
+
+df.fillna(df.mean(),inplace=True)
+
+df.head()
+
+df.isnull().sum()
+
+df.eq(0).sum()
+
+df.corr()
+
+import seaborn as sns
+sns.heatmap(df.corr())
+
+feature_names = df.corr().nlargest(4,'Outcome').index.tolist()
+df.corr().nlargest(4,'Outcome').index.tolist()
+
+from sklearn import linear_model
+from sklearn.model_selection import cross_val_score
+
+X=df[['Glucose','BMI','Age']]
+y=df.iloc[:, 8]
+
+X
+y
+
+log_reg=linear_model.LogisticRegression()
+
+log_rec_score=cross_val_score(log_reg,X,y,cv=10,scoring='accuracy').mean()
+
+log_rec_score
+
+results=[]
+results.append(log_rec_score)
+
+results
+
+from sklearn import svm
+
+linear_svm=svm.SVC(kernel='linear')
+
+linear_svm_score=cross_val_score(linear_svm,X,y,cv=10,
+                                scoring='accuracy').mean()
+
+linear_svm_score
+
+results.append(linear_svm_score)
+
+results
+
+import pickle 
+
+name='diabetes.sav'
+
+log_reg.fit(X,y)
+pickle.dump(log_reg,open(name,'wb'))
+
+loaded_model=pickle.load(open(name,'rb'))
+loaded_model
+
+Glucose = 60
+BMI = 40
+Age = 30
+prediction = loaded_model.predict([[Glucose ,BMI ,Age]])
+
+prediction
+
+
+
+
+
