@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-link="C:/Users/hasan/Desktop/diabetes.csv"
+link="C:/Users/diabetes.csv"
 df = pd.read_csv(link,header=0)
 
 df.head()
